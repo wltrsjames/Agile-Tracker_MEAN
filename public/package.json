@@ -1,0 +1,17 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "This is the website for the application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "angular": "*",
+    "angular-route": "^1.5.7",
+    "bootstrap": "*",
+    "ng-table": "^1.0.0"
+  },
+  "author": "James Walters",
+  "license": "ISC"
+}

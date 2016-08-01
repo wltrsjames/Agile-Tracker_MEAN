@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <title>Agile Tracker</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet" data-semver="3.3.6" data-require="bootstrap-css@3.3.6" />
+        <link rel="stylesheet" href="node_modules/ng-table/dist/ng-table.min.css"/>
+        <link rel="stylesheet" href="styles/styles.css"/>
+
+        <script src="node_modules/angular/angular.min.js"></script>
+        <script src="node_modules/angular-route/angular-route.min.js"></script>     
+        <script src="node_modules/ng-table/dist/ng-table.min.js"></script>
+
+        <script src="scripts/main.js"></script>
+
+        <script src="services/loginService.js"></script>
+        <script src="services/projectService.js"></script>
+        <script src="services/userService.js"></script>
+        <script src="services/customerService.js"></script>
+        <script src="services/dataPass.js"></script>
+
+        <script src="controllers/loginController.js"></script>
+        <script src="controllers/mainController.js"></script>
+        <script src="controllers/projectController.js"></script>
+        <script src="controllers/userController.js"></script>
+
+
+    </head>
+    <body class="">
+        <div class="col-md-12 header">
+            <img class="col-md-3" src="images/LOGO.png"/>
+            <div ng-show="showUser" ng-controller="userController" class="col-md-offset-9">
+                <h3>User: {{user}} <a ng-click="logout()">Logout</a></h3>
+            </div>
+        </div>
+        <div ng-view></div>
+    </body>
+</html>

@@ -1,0 +1,146 @@
+<div id="content" class="col-lg-12">
+    <!--    Display mode-->
+    <h3 ng-hide="editMode">{{project.ProjectName}} <span><button ng-show="fullAccess" ng-click="editProject()">Edit</button></span></h3>
+    <table ng-hide="editMode" class="table table-striped table-bordered centerTable">           
+        <tr>
+            <th>Project Name</th>
+            <td>{{project.ProjectName}}</td>
+        </tr>
+        <tr>
+            <th>Definition</th>
+            <td>{{project.Definition}}</td>
+        </tr>
+        <tr>
+            <th>Outline</th>
+            <td>{{project.Outline}}</td>
+        </tr>
+        <tr>
+            <th>Customer</th>
+            <td>{{project.Customer || 'N/A'}}</td>
+        </tr>
+        <tr>
+            <th>Project Owner</th>
+            <td>{{project.Owner || 'N/A'}}</td>
+        </tr>
+    </table>
+    <!--    Edit mode-->
+    <button ng-hide="!editMode" ng-click="saveProject()">Save</button>
+    <button ng-hide="!editMode" ng-click="editMode = false">Cancel</button>
+    <form ng-hide="!editMode">
+        Project Name:<br>
+        <input type="text" ng-model="project.ProjectName" ng-value="project.ProjectName"><br>
+        Definition:<br>
+        <textarea class="col-md-12" type="text" ng-model="project.Definition"></textarea><br>
+        Outline:<br>
+        <textarea class="col-md-12" type="text" ng-model="project.Outline"></textarea><br>
+        Customer:<br>
+        <select ng-model="project.Customer">
+            <option value="" style="display:none;"></option>
+            <option value="N/A">N/A</option>
+            <option ng-repeat="customer in customers">{{customer.CustomerName}}</option>
+        </select><br>
+        Project Owner:<br>
+        <select ng-model="project.Owner">
+            <option value="" style="display:none;"></option>
+            <option value="N/A">N/A</option>
+            <option ng-repeat="user in users">{{user.FirstName +" "+ user.LastName}}</option>
+        </select><br>
+    </form>
+
+    <h3>Milestones: <span ><button ng-show="fullAccess" ng-click="addMile()">+</button></span></h3>
+    <table class="table table-striped table-bordered centerTable">
+        <tr>
+            <td>Search:<br/> <input class="firstSearch" type="text" ng-model="navState.searchTerm1.firstSearch"></td>
+        </tr>
+        <tr>            
+            <th class="centerTableth">Milestone Description</th>
+            <th class="centerTableth">Estimated Hours</th>
+            <th class="centerTableth">HoursSpent</th>
+            <th class="centerTableth">Status</th>
+            <th class="centerTableth">Date Created</th>
+            <th ng-show="fullAccess" class="centerTableth">Options</th>
+        </tr>
+        <tr ng-show="addMileMode">
+            <td><textarea type="text" ng-model="newMile.MilestoneDescription"></textarea></td>
+            <td><input type="text" ng-model="newMile.EstimatedHours"></td>
+            <td><input type="text" ng-model="newMile.HoursSpent"></td>
+            <td><input type="text" ng-model="newMile.Status"></td>
+            <td></td>
+            <td><button ng-click="addMileSave()">Add</button></td>
+        </tr>
+        <tr ng-repeat="milestone in project.Milestones | filter:navState.searchTerm1.firstSearch" ng-class="{highlight: hover}" id="row-{{$index}}" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+            <td>
+                <div ng-show="!editMileMode || !thisMileCheck($index)">{{milestone.MilestoneDescription}}</div>
+                <input id="MilestoneDescription{{$index}}" ng-show="editMileMode && thisMileCheck($index)" ng-modal="milestone.MilestoneDescription" ng-value="milestone.MilestoneDescription"/>
+            </td>            
+            <td>
+                <div ng-show="!editMileMode || !thisMileCheck($index)">{{milestone.EstimatedHours}}</div>
+                <input id="EstimatedHours{{$index}}" ng-show="editMileMode && thisMileCheck($index)" type="text" ng-modal="milestone.EstimatedHours" ng-value="milestone.EstimatedHours">
+            </td>            
+            <td>
+                <div ng-show="!editMileMode || !thisMileCheck($index)">{{milestone.HoursSpent}}</div>
+                <input id="HoursSpent{{$index}}" ng-show="editMileMode && thisMileCheck($index)" type="text" ng-modal="milestone.HoursSpent" ng-value="milestone.HoursSpent">
+            </td>
+            <td>
+                <div ng-show="!editMileMode || !thisMileCheck($index)">{{milestone.Status}}</div>
+                <input id="Status{{$index}}" ng-show="editMileMode && thisMileCheck($index)" type="text" ng-modal="milestone.Status" ng-value="milestone.Status">
+
+            </td>
+            <td>{{milestone.createDate | date:'dd-MM-yyyy'}}</td>
+            <td ng-show="fullAccess"><button ng-click="mileEdit($index)">Edit</button><button ng-show="editMileMode && thisMileCheck($index)" ng-click="saveEditMile($index, milestone._id)">Save</button></td>
+        </tr>
+    </table>
+
+    <h3>User Stories: <span ><button ng-show="fullAccess" ng-click="addStory()">+</button></span></h3>
+    <table class="table table-striped table-bordered centerTable">
+        <tr>
+            <td>Search:<br/> <input class="firstSearch" type="text" ng-model="navState.searchTerm2.firstSearch"></td>
+        </tr>
+        <tr>            
+            <th class="centerTableth">Request</th>
+            <th class="centerTableth">User Role</th>
+            <th class="centerTableth">Purpose</th>
+            <th class="centerTableth">AcceptanceCriteria</th>
+            <th class="centerTableth">MVP?</th>
+            <th class="centerTableth">Date Created</th>
+            <th ng-show="fullAccess" class="centerTableth">Options</th>
+        </tr>
+        <tr ng-show="addStoryMode">
+            <td><textarea type="text" ng-model="newStory.Request"></textarea></td>
+            <td><input type="text" ng-model="newStory.UserRole"></td>
+            <td><textarea type="text" ng-model="newStory.Purpose"></textarea></td>
+            <td><textarea type="text" ng-model="newStory.AcceptanceCriteria"></textarea></td>
+            <td><input type="checkbox" ng-model="newStory.MVP"></td>
+            <td></td>
+
+            <td><button ng-click="addStorySave()">Add</button></td>
+        </tr>
+        <tr ng-repeat="story in project.UserStories | filter:navState.searchTerm2.firstSearch" ng-class="{highlight: hover}" id="row-{{$index}}" ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+            <td>
+                <div ng-show="!editStoryMode || !thisStoryCheck($index)">{{story.Request}}</div>
+                <input id="Request{{$index}}" ng-show="editStoryMode && thisStoryCheck($index)" ng-modal="story.Request" ng-value="story.Request"/>
+            </td>            
+            <td>
+                <div ng-show="!editStoryMode || !thisStoryCheck($index)">{{story.UserRole}}</div>
+                <input id="UserRole{{$index}}" ng-show="editStoryMode && thisStoryCheck($index)" type="text" ng-modal="story.UserRole" ng-value="story.UserRole">
+            </td>            
+            <td>
+                <div ng-show="!editStoryMode || !thisStoryCheck($index)">{{story.Purpose}}</div>
+                <input id="Purpose{{$index}}" ng-show="editStoryMode && thisStoryCheck($index)" type="text" ng-modal="story.Purpose" ng-value="story.Purpose">
+            </td>
+            <td>
+                <div ng-show="!editStoryMode || !thisStoryCheck($index)">{{story.AcceptanceCriteria}}</div>
+                <input id="AcceptanceCriteria{{$index}}" ng-show="editStoryMode && thisStoryCheck($index)" type="text" ng-modal="story.AcceptanceCriteria" ng-value="story.AcceptanceCriteria">
+
+            </td>
+            <td>
+                <div ng-show="!editStoryMode || !thisStoryCheck($index)">{{story.MVP === true? 'Yes' : 'No'}}</div>
+                <input id="MVP{{$index}}" ng-show="editStoryMode && thisStoryCheck($index)" type="checkbox" ng-checked="story.MVP">
+
+            </td>
+            <td>{{story.createDate | date:'dd-MM-yyyy'}}</td>
+            <td><button ng-show="fullAccess" ng-click="storyEdit($index)">Edit</button><button ng-show="editStoryMode && thisStoryCheck($index)" ng-click="saveEditStory($index, story._id)">Save</button></td>
+        </tr>
+    </table>
+    <h3><span><button ng-click="back()">Back</button></span></h3>
+</div>

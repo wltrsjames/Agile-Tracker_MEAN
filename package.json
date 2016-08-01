@@ -1,0 +1,19 @@
+{
+  "name": "agile-tracker",
+  "version": "1.0.0",
+  "description": "Project Tracking app for Agile",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "express-session": "*",
+    "mongoose": "*",
+    "nodemon": "^1.10.0",
+    "opener": "^1.4.1"
+  },
+  "author": "James Walters",
+  "license": "ISC"
+}
